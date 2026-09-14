@@ -48,13 +48,14 @@ style.textContent = `
   .desc {
     font-size: 10px;
   }
-  .window {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-
-    backdrop-filter: blur(5px);
-  }
+#window {
+display: grid;
+grid-template-columns: repeat(auto-fill, 120px);
+align-content: start;
+  align-content: flex-start;
+  justify-content: flex-start;
+  backdrop-filter: blur(5px);
+}
 
   ::-webkit-scrollbar {
     display: none;
@@ -357,7 +358,7 @@ document.body.appendChild(style);
         menus: {
           elements: {
             acceptReporters: true,
-            items: ['.tile', '.title', '.window']
+            items: ['.tile', '.title', '#window', '.thumb']
           },
           css: {
             acceptReporters: true,
