@@ -566,14 +566,6 @@ document.body.appendChild(style);
       window.appendChild(container)
       
     }
-    addOptions({OPTIONS}) {
-      const tiles = document.getElementsByClassName("tile")
-      for(let i = 0; i < tiles[i].length; i++) {
-        tiles[j].textContent = 'nope'
-        console.log(tiles[j].innerHTML)
-      }
-
-    }
 
     //setMaxHeight({HEIGHT}) {
     //  const tiles = document.getElementsByClassName("tile")
@@ -613,8 +605,3 @@ document.body.appendChild(style);
   }
   Scratch.extensions.register(new MyExtension());
 })(Scratch);
-
-
- for(let j = 0; j < OPTIONS.length; j++) {
-          tiles[j].textContent = 'nope'
-  } 
