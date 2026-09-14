@@ -1,6 +1,6 @@
 // name: Tiles
 // by: Axolay
-// version: 1.1
+// version: 1.2
 
 const style = document.createElement('style')
 style.textContent = `
@@ -25,7 +25,6 @@ style.textContent = `
 
   .tile:hover {
     cursor: pointer;
-    filter: brightness(1.25);
   }
 
   .tilehovertoexpand {
@@ -34,8 +33,8 @@ style.textContent = `
     }
 
   .tile:active {
-    transform: scale(0.98);
     filter: brightness(.75);
+    transition: 0s;
   }
 
   .thumb {
@@ -51,7 +50,9 @@ style.textContent = `
   }
   .window {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+
     backdrop-filter: blur(5px);
   }
 
@@ -143,7 +144,7 @@ document.body.appendChild(style);
               },
               THUMB: {
                 type: Scratch.ArgumentType.STRING,
-                defaultValue: 'https://greedyallay.github.io/extensions/resources/IMG_5205.jpg'
+                defaultValue: 'https://greedyallay.github.io/extensions/resources/dango.png'
               },
               ID: {
                 type: Scratch.ArgumentType.STRING,
@@ -356,11 +357,11 @@ document.body.appendChild(style);
         menus: {
           elements: {
             acceptReporters: true,
-            items: ['card', 'title', 'description', 'background']
+            items: ['.tile', '.title', '.window']
           },
           css: {
             acceptReporters: true,
-            items: ['color', 'border', 'border-radius', 'padding', 'animation-duration']            
+            items: ['color', 'background-color','width', 'height', 'background-image', 'border', 'border-radius', 'padding', 'animation-duration']            
           },
           properties: {
             acceptReporters: false,
@@ -462,39 +463,9 @@ document.body.appendChild(style);
       const window = document.getElementById('window')
       const text = document.getElementsByClassName('title')
       const desc = document.getElementsByClassName('desc')
-      if(CSS == 'color') {
-        if(ELEMENT == 'card') {
-          for(let i = 0; i < card.length; i++) {
-            card[i].style.backgroundColor = VALUE
-          }
-        } else if(ELEMENT == 'title') {
-          for(let i = 0; i < text.length; i++) {
-            text[i].style.color = VALUE
-          }          
-        } else if(ELEMENT == 'description') {
-          for(let i = 0; i < desc.length; i++) {
-            desc[i].style.color = VALUE
-          }          
-        } else if(ELEMENT == 'background') {
-          window.style.backgroundColor = VALUE        
-        }
-      } else if(CSS == 'border') {
-          if(ELEMENT == 'card') {
-          for(let i = 0; i < card.length; i++) {
-            card[i].style.borderColor = VALUE
-          }
-        }
-      } else if(CSS == 'border-radius') {
-          if(ELEMENT == 'card') {
-          for(let i = 0; i < card.length; i++) {
-            card[i].style.borderRadius = VALUE
-          }
-        }
-      } else {
-          for(let i = 0; i < card.length; i++) {
-            card[i].style.backgroundColor = VALUE
-          }
-      }
+            document.querySelectorAll(ELEMENT).forEach(el => {
+                el.style[CSS] = VALUE
+            })
 
     }
 
@@ -544,10 +515,10 @@ document.body.appendChild(style);
 
     }
 
-    setMaxHeight({HEIGHT}) {
-      const tiles = document.getElementsByClassName("tile")
-      for(let i = 0; i < tiles.length; i++) { tiles[i].style = `max-height: ${HEIGHT}px` }
-    }
+    //setMaxHeight({HEIGHT}) {
+    //  const tiles = document.getElementsByClassName("tile")
+    //  for(let i = 0; i < tiles.length; i++) { tiles[i].style = `max-height: ${HEIGHT}px` }
+    //}
 
     addLine({ID, TEXT, CSS}) {
       const card = document.getElementById(`card${ID}`)
