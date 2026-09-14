@@ -312,7 +312,7 @@ document.body.appendChild(style);
             }
           },
           {
-            opcode: 'setStyle',
+            opcode: 'setStyleNew',
             blockType: Scratch.BlockType.COMMAND,
             text: 'set [ELEMENT] [CSS] to [VALUE]',
             arguments: {
@@ -360,6 +360,40 @@ document.body.appendChild(style);
               }
             }
          },
+         {
+            opcode: 'setMaxHeight',
+            blockType: Scratch.BlockType.COMMAND,
+            text: 'set max card height: [HEIGHT] px',
+            arguments: {
+              WIDTH: {
+                type: Scratch.ArgumentType.NUMBER,
+                defaultValue: 'cat'
+              },
+              HEIGHT: {
+                type: Scratch.ArgumentType.NUMBER,
+                defaultValue: '100'
+              },
+            }
+          },
+          {
+            opcode: 'setStyle',
+            blockType: Scratch.BlockType.COMMAND,
+            text: ' (legacy) set [ELEMENT] [CSS] to [VALUE]',
+            arguments: {
+              ELEMENT: {
+                type: Scratch.ArgumentType.STRING,
+                menu: 'elements'
+              },
+              VALUE: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: 'red'
+              },
+              CSS: {
+                type: Scratch.ArgumentType.STRING,
+                menu: 'css'
+              }
+            }
+          },    
         ],
         menus: {
           elements: {
