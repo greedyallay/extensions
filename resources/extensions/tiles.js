@@ -48,14 +48,13 @@ style.textContent = `
   .desc {
     font-size: 10px;
   }
-#window {
-display: grid;
-grid-template-columns: repeat(auto-fill, 120px);
-align-content: start;
-  align-content: flex-start;
-  justify-content: flex-start;
-  backdrop-filter: blur(5px);
-}
+  #window {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 120px);
+    align-content: start;
+    align-content: flex-start;
+    justify-content: flex-start;
+  }
 
   ::-webkit-scrollbar {
     display: none;
@@ -308,37 +307,6 @@ document.body.appendChild(style);
               }
             }
           },
-
-          {
-            opcode: 'setMaxHeight',
-            blockType: Scratch.BlockType.COMMAND,
-            text: 'set max card height: [HEIGHT] px',
-            arguments: {
-              WIDTH: {
-                type: Scratch.ArgumentType.NUMBER,
-                defaultValue: 'cat'
-              },
-              HEIGHT: {
-                type: Scratch.ArgumentType.NUMBER,
-                defaultValue: '100'
-              },
-            }
-          },         
-//          {
-//            opcode: 'property',
-//            blockType: Scratch.BlockType.COMMAND,
-//            text: 'set property [PROP] to [VALUE]',
-//            arguments: {
-//              PROP: {
-//                type: Scratch.ArgumentType.STRING,
-//                menu: 'properties'
-//              },
-//              VALUE: {
-//                type: Scratch.ArgumentType.STRING,
-//                defaultValue: 'true'
-//              }
-//            }
-////          },
           {
             blockType: Scratch.BlockType.LABEL,
             text: 'Miscellaneous'
@@ -358,15 +326,16 @@ document.body.appendChild(style);
         menus: {
           elements: {
             acceptReporters: true,
-            items: ['.tile', '.title', '#window', '.thumb']
+            items: ['.tile', '.title','.thumb', '#window']
           },
           css: {
             acceptReporters: true,
-            items: ['color', 'background-color','width', 'height', 'background-image', 'border', 'border-radius', 'padding', 'animation-duration']            
+            items: ['color', 'background-color','width', 'height', 'min-width', 'max-width', 'min-height', 'max-height', 'margin', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'background-image', 'border', 'border-radius', 'padding', 'animation-duration']            
           },
           properties: {
             acceptReporters: false,
-            items: ['show everything on hover', 'always full height']
+            items: [' ']
+            //items: ['show everything on hover', 'always full height']
           }
         }
       };
