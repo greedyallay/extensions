@@ -312,7 +312,7 @@ document.body.appendChild(style);
             }
           },
           {
-            opcode: 'setStyleNew',
+            opcode: 'setStyle',
             blockType: Scratch.BlockType.COMMAND,
             text: 'set [ELEMENT] [CSS] to [VALUE]',
             arguments: {
