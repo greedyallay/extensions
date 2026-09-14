@@ -274,7 +274,26 @@ document.body.appendChild(style);
             text: 'Styles'
           },
           {
-            opcode: 'setStyle',
+            opcode: 'setStylePX',
+            blockType: Scratch.BlockType.COMMAND,
+            text: 'set [ELEMENT] [CSS] to [VALUE]px',
+            arguments: {
+              ELEMENT: {
+                type: Scratch.ArgumentType.STRING,
+                menu: 'elements'
+              },
+              VALUE: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: '10px'
+              },
+              CSS: {
+                type: Scratch.ArgumentType.STRING,
+                menu: 'csspx'
+              }
+            }
+          },
+          {
+            opcode: 'setStyleColor', //the legacy one
             blockType: Scratch.BlockType.COMMAND,
             text: 'set [ELEMENT] [CSS] to [VALUE]',
             arguments: {
@@ -283,12 +302,31 @@ document.body.appendChild(style);
                 menu: 'elements'
               },
               VALUE: {
-                type: Scratch.ArgumentType.STRING,
-                defaultValue: 'red'
+                type: Scratch.ArgumentType.COLOR,
+                defaultValue: '#b32b2b'
               },
               CSS: {
                 type: Scratch.ArgumentType.STRING,
-                menu: 'css'
+                menu: 'cssclr'
+              }
+            }
+          },
+          {
+            opcode: 'setStyleNew',
+            blockType: Scratch.BlockType.COMMAND,
+            text: 'set [ELEMENT] [CSS] to [VALUE]',
+            arguments: {
+              ELEMENT: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: '.tile'
+              },
+              VALUE: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: 'value'
+              },
+              CSS: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: 'css'
               }
             }
           },
@@ -331,6 +369,14 @@ document.body.appendChild(style);
           css: {
             acceptReporters: true,
             items: ['color', 'background-color','width', 'height', 'min-width', 'max-width', 'min-height', 'max-height', 'margin', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'background-image', 'border', 'border-radius', 'padding', 'animation-duration']            
+          },
+          csspx: {
+            acceptReporters: true,
+            items: ['width', 'height', 'min-width', 'max-width', 'min-height', 'max-height', 'margin', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'border-width', 'border-radius', 'padding']            
+          },
+          cssclr: {
+            acceptReporters: true,
+            items: ['color', 'background-color', 'border-color', 'outline-color']            
           },
           properties: {
             acceptReporters: false,
@@ -428,6 +474,17 @@ document.body.appendChild(style);
 
     }
 
+    setStyleNew(args) {
+      this.setStyle(args)
+    }
+
+    setStylePX(args) {
+      this.setStyle(args)
+    }
+    setStyleColor(args) {
+      this.setStyle(args)
+    }
+
     setStyle({ELEMENT, VALUE, CSS}) {
       const card = document.getElementsByClassName('tile')
       const window = document.getElementById('window')
@@ -436,7 +493,6 @@ document.body.appendChild(style);
             document.querySelectorAll(ELEMENT).forEach(el => {
                 el.style[CSS] = VALUE
             })
-
     }
 
     removeTile({ID}) {
