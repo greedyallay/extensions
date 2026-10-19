@@ -384,7 +384,7 @@ document.body.appendChild(style);
               },
               ELEMENT: {
                 type: Scratch.ArgumentType.STRING,
-                menu: 'elements'
+                menu: 'elements',
                 defaultValue: '#window'
               },
             }
