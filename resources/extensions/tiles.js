@@ -1,6 +1,12 @@
 // name: Tiles
 // by: Axolay
-// version: 1.2
+// version: 1.21
+
+const credits = {
+  version: 1.25,
+  whatsnew: "added this specific block, added option for filter effects",
+  list: "created by axolay"
+}
 
 const style = document.createElement('style')
 style.textContent = `
@@ -21,6 +27,7 @@ style.textContent = `
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    user-drag: none;
   }
 
   .tile:hover {
@@ -40,6 +47,7 @@ style.textContent = `
   .thumb {
     width: 100%;
     aspect-ratio: 16/9;
+    user-drag: none;
   }
   .title {
     font-size: 15px;
@@ -71,9 +79,17 @@ style.textContent = `
     width: 100%;
     background-color: blue;
   }
+  .titleDivider {
+      font-size = '30px';
+      font-weight = '50px';
+      margin-left: 10px;
+
+  }
 
   `
 document.body.appendChild(style);
+
+
 
 (function (Scratch) {
   'use strict';
@@ -83,8 +99,27 @@ document.body.appendChild(style);
 
   let mouse = {}
 
+  let panel;
+
   addEventListener('pointerdown', (e) => {
     clickedButtons = {}
+  })
+
+  let scroll = 0;
+  let scrolling = false;
+  let mouseY = 0;
+  let mousePos = {}
+
+  addEventListener('mousemove', (mouse) => {
+    mousePos = mouse;
+    if(scrolling) {
+      console.log(scroll + mouse.y)
+      panel.scrollTop = scroll + mouseY
+    }
+  })
+
+  addEventListener('mouseup', (e) => {
+    scrolling = false
   })
 
   let max = {}
@@ -163,7 +198,7 @@ document.body.appendChild(style);
             arguments: {
               NAME: {
                 type: Scratch.ArgumentType.STRING,
-                defaultValue: 'NEW TITLE'
+                defaultValue: 'new title'
               }
             }
           },
@@ -331,6 +366,30 @@ document.body.appendChild(style);
             }
           },
           {
+            opcode: 'setEffect',
+            blockType: Scratch.BlockType.COMMAND,
+            text: 'apply [EFFECT] to [BACKFOREGROUND] of [ELEMENT] amount: [VALUE]',
+            arguments: {
+              BACKFOREGROUND: {
+                type: Scratch.ArgumentType.STRING,
+                menu: 'backforeground'
+              },
+              VALUE: {
+                type: Scratch.ArgumentType.STRING,
+                defaultValue: '10px'
+              },
+              EFFECT: {
+                type: Scratch.ArgumentType.STRING,
+                menu: 'effects'
+              },
+              ELEMENT: {
+                type: Scratch.ArgumentType.STRING,
+                menu: 'elements'
+                defaultValue: '#window'
+              },
+            }
+          },
+          {
             opcode: 'setThumb',
             blockType: Scratch.BlockType.COMMAND,
             text: 'set thumb of id: [ID] to [THUMB]',
@@ -350,6 +409,17 @@ document.body.appendChild(style);
             text: 'Miscellaneous'
           },
           {
+            opcode: 'credits',
+            blockType: Scratch.BlockType.REPORTER,
+            text: '[CREDITS]',
+            arguments: {
+              CREDITS: {
+                type: Scratch.ArgumentType.STRING,
+                menu: 'creditsMenu'
+              }
+            }
+         },
+          {
             opcode: 'run',
             blockType: Scratch.BlockType.COMMAND,
             text: 'run custom js [CODE]',
@@ -360,6 +430,7 @@ document.body.appendChild(style);
               }
             }
          },
+
          {
             opcode: 'setMaxHeight',
             blockType: Scratch.BlockType.COMMAND,
@@ -398,7 +469,7 @@ document.body.appendChild(style);
         menus: {
           elements: {
             acceptReporters: true,
-            items: ['.tile', '.title','.thumb', '#window']
+            items: ['.tile', '.title','.thumb', '.titleDivider', '#window']
           },
           css: {
             acceptReporters: true,
@@ -406,7 +477,7 @@ document.body.appendChild(style);
           },
           csspx: {
             acceptReporters: true,
-            items: ['width', 'height', 'min-width', 'max-width', 'min-height', 'max-height', 'margin', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'border-width', 'border-radius', 'padding']            
+            items: ['width', 'height', 'min-width', 'max-width', 'min-height', 'max-height', 'margin', 'margin-left', 'margin-right', 'margin-top', 'margin-bottom', 'border-width', 'border-radius', 'padding', 'font-size', 'font-weight']            
           },
           cssclr: {
             acceptReporters: true,
@@ -416,6 +487,19 @@ document.body.appendChild(style);
             acceptReporters: false,
             items: [' ']
             //items: ['show everything on hover', 'always full height']
+          },
+          creditsMenu: {
+            acceptReporters: false,
+            items: ['version', "what's new", 'credits']
+            //items: ['show everything on hover', 'always full height']
+          },
+          backforeground: {
+            acceptReporters: true,
+            items: ['foreground', 'background']
+          },
+          effects: {
+            acceptReporters: true,
+            items: ['blur', 'brightness', 'contrast', 'grayscale', 'hue-rotate', 'invert', 'opacity', 'saturate', 'seopia']
           }
         }
       };
@@ -423,21 +507,28 @@ document.body.appendChild(style);
 
     initialise({X, Y, WIDTH, HEIGHT}) {
       if(document.getElementById('window') == null) {
-      const panel = document.createElement("div")
-      panel.style = `
-      width: ${WIDTH};
-      height: ${HEIGHT};
-      background-color: #00000041;
-      display: flex;
-      flex-wrap: wrap;
-      overflow-y: scroll;
-      position: absolute;
-      left: ${X}px;
-      top: ${Y}px
-      `
-      panel.style.pointerEvents = 'auto';
-      panel.id = 'window'
-      Scratch.renderer.addOverlay(panel, "scale")
+        panel = document.createElement("div")
+        panel.style = `
+        width: ${WIDTH};
+        height: ${HEIGHT};
+        background-color: #00000041;
+        display: flex;
+        flex-wrap: wrap;
+        overflow-y: scroll;
+        position: absolute;
+        left: ${X}px;
+        top: ${Y}px
+        `
+        panel.style.pointerEvents = 'auto';
+        panel.id = 'window'
+        Scratch.renderer.addOverlay(panel, "scale")
+
+        panel.addEventListener("mousedown", () => {
+          scroll = panel.scrollTop
+          scrolling = true;
+          mouseY = mousePos.y;
+          console.log("i love diddy but he doesnt love me")
+        })
       }
     }
 
@@ -519,14 +610,22 @@ document.body.appendChild(style);
       this.setStyle(args)
     }
 
+    setEffect({BACKFOREGROUND, EFFECT, VALUE, ELEMENT}) { //ugh i dont wanna do ts
+      if(BACKFOREGROUND === "foreground") {
+        document.querySelectorAll(ELEMENT).forEach(el => {
+            el.style.filter = `${EFFECT}(${VALUE})`
+        })
+      } else {
+        document.querySelectorAll(ELEMENT).forEach(el => {
+            el.style.backdropFilter = `${EFFECT}(${VALUE})`
+        })
+      }
+    }
+
     setStyle({ELEMENT, VALUE, CSS}) {
-      const card = document.getElementsByClassName('tile')
-      const window = document.getElementById('window')
-      const text = document.getElementsByClassName('title')
-      const desc = document.getElementsByClassName('desc')
-            document.querySelectorAll(ELEMENT).forEach(el => {
-                el.style[CSS] = VALUE
-            })
+      document.querySelectorAll(ELEMENT).forEach(el => {
+          el.style[CSS] = VALUE
+      })
     }
 
     removeTile({ID}) {
@@ -554,8 +653,7 @@ document.body.appendChild(style);
       const hr = document.createElement('hr')
       const br = document.createElement('br')
       const container = document.createElement('div')
-      title.style.fontSize = '30px'
-      title.style.fontWeight = '50px'
+      title.className = 'titleDivider'
       title.textContent = NAME
       const window = document.getElementById('window')
       container.style.display = 'block'
@@ -597,6 +695,21 @@ document.body.appendChild(style);
     setThumb({ID, THUMB}) {
       const thumb = document.getElementById(`${ID}-thumb`)
       thumb.src = THUMB
+    }
+
+    credits({CREDITS}) {
+      switch(CREDITS) {
+        case 'version': {
+          return credits.version
+        }
+        case "what's new": {
+          return credits.whatsnew
+        }
+        case "credits": {
+          return credits.list
+        }
+      }
+      return CREDITS
     }
 
     run({CODE}) {
